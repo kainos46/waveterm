@@ -55,6 +55,10 @@ func setApiType(opts *wshrpc.WaveAIOptsType, clientConfig *openaiapi.ClientConfi
 func convertPrompt(prompt []wshrpc.WaveAIPromptMessageType) []openaiapi.ChatCompletionMessage {
 	var rtn []openaiapi.ChatCompletionMessage
 	for _, p := range prompt {
+		// Skip error messages - OpenAI API doesn't accept "error" as a valid role
+		if p.Role == "error" {
+			continue
+		}
 		msg := openaiapi.ChatCompletionMessage{Role: p.Role, Content: p.Content, Name: p.Name}
 		rtn = append(rtn, msg)
 	}

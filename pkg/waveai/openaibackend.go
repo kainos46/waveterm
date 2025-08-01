@@ -110,8 +110,11 @@ func (OpenAIBackend) StreamCompletion(ctx context.Context, request wshrpc.WaveAI
 			Messages: convertPrompt(request.Prompt),
 		}
 
-		// Handle o1 models differently - use non-streaming API
-		if strings.HasPrefix(request.Opts.Model, "o1-") {
+		// Extended model family detection
+		if strings.HasPrefix(request.Opts.Model, "o1-") ||
+		   strings.HasPrefix(request.Opts.Model, "gpt-4.1") ||
+		   strings.HasPrefix(request.Opts.Model, "o4-") ||
+		   strings.HasPrefix(request.Opts.Model, "o3-") {
 			req.MaxCompletionTokens = request.Opts.MaxTokens
 			req.Stream = false
 
